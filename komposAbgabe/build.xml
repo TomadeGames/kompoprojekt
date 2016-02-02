@@ -7,8 +7,8 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="Kompoprojekt-war" default="default" basedir=".">
-    <description>Builds, tests, and runs the project Kompoprojekt-war.</description>
+<project name="komposAbgabe" default="default" basedir=".">
+    <description>Builds, tests, and runs the project komposAbgabe.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
 
