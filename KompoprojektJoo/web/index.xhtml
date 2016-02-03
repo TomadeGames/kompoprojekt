@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Startseite</title>
+    </h:head>
+    <h:body>
+        <!--h:form>
+            <h:outputText value="Materialname:"/><br/>
+            <h:inputText value="#{viewmodel.materialname}" id="materialName" required="true"/><br/>
+            <h:outputText value="Anzahl:"/><br/>
+            <h:inputText value="#{viewmodel.materialanzahl}" id="materialAnzahl" required="true"/><br/>
+            <br/>
+            <h:commandButton value="Material einlagern" action="#{viewmodel.addNewMaterial()}"/><br/>
+            <br/>
+            <h:outputText value="#{viewmodel.einfuegStatus}"/><br/>
+        </h:form-->
+        
+        <h:link value="Material hinuzf&uuml;gen" outcome="addMaterial"/>
+    </h:body>
+</html>
+
