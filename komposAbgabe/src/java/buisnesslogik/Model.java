@@ -5,6 +5,7 @@
  */
 package buisnesslogik;
 
+import entities.Material;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,5 +28,12 @@ public class Model implements Serializable{
             erg.add(f.getName());
         });
         return erg;
+    }
+    
+    public void addMaterial(String name, int anzahl){
+        Material f = new Material();
+        f.setName(name);
+        f.setAnzahl(anzahl);
+        this.db.persist(f);
     }
 }
