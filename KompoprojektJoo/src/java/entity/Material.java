@@ -22,7 +22,12 @@ public class Material implements Serializable {
     private String name;
     private int anzahl;
 
-
+@Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (name != null ? name.hashCode() : 0);
+        return hash;
+    }
 
 
     @Override

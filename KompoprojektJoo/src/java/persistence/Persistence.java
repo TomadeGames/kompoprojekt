@@ -5,6 +5,7 @@
  */
 package persistence;
 
+import entity.Leihe;
 import entity.Material;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -32,5 +33,9 @@ public class Persistence {
     
     public List<Material> getAllMaterials(){
         return em.createQuery("SELECT a FROM Material a", Material.class).getResultList();
+    }
+    
+    public List<Leihe> getAllLeihen(){
+        return em.createQuery("SELECT a FROM Leihe a", Leihe.class).getResultList();
     }
 }

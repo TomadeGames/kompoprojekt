@@ -18,9 +18,9 @@ import javax.inject.Named;
  * @author denrieke
  */
 
-@Named("viewmodel")
+@Named("addmaterialview")
 @RequestScoped
-public class Viewmodel implements Serializable{
+public class AddMaterialView implements Serializable{
     @Inject
     private Model model;
 
