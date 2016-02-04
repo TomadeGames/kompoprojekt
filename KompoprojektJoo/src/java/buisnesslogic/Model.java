@@ -8,6 +8,8 @@ package buisnesslogic;
 import entity.Leihe;
 import entity.Material;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,6 +44,15 @@ public class Model implements Serializable{
         List<String> erg = new ArrayList<>();
         this.db.getAllMaterials().stream().forEach((m) -> {
             erg.add(m.getName() + ": " + m.getAnzahl());
+        });
+        return erg;
+    }
+    
+    public List<String> getLeihen(){
+        List<String> erg = new ArrayList<>();
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yy");
+        this.db.getAllLeihen().stream().forEach((l) -> {
+            erg.add(l.getName() + ": " + l.getAnzahl() + "x " +  l.getMaterial().getName() + " von " + formatter.format(l.getStartDatum()) + " bis " + formatter.format(l.getEndeDatum()));
         });
         return erg;
     }
