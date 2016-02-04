@@ -31,6 +31,16 @@ public class Persistence {
         return em.merge(object);
     }
     
+    public Material getMaterial(String name){
+        List<Material> mats = getAllMaterials();
+        for(Material m: mats){
+            if(m.getName().equals(name)){
+                return m;
+            }
+        }
+        return null;
+    }
+    
     public List<Material> getAllMaterials(){
         return em.createQuery("SELECT a FROM Material a", Material.class).getResultList();
     }

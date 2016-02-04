@@ -11,10 +11,20 @@
         <h:form>
             <h:outputText value="Name:"/><br/>
             <h:inputText value="#{showmaterialview.leihename}" id ="name" required="true"/><br/>
+            <br/>
+            <h:outputText value="Anzahl"/><br/>
+            <h:inputText value="#{showmaterialview.anzahl}" id ="anzahl" required="true"/><br/>
+            <br/>
+            <h:outputText value="Startdatum: (yyyy MM dd)"/><br/>
+            <h:inputText value="#{showmaterialview.startdatum}" id ="startdatum" required="true"/><br/>
+            <br/>
+            <h:outputText value="Enddatum (yyyy MM dd)"/><br/>
+            <h:inputText value="#{showmaterialview.enddatum}" id ="enddatum" required="true"/><br/>
+            <br/>
             <h:outputText value="Materialien:"/><br/>
             <ui:repeat value="#{showmaterialview.materialien}" var="item">
-                <h:outputText value="#{item}" />
-                <!--h:commandButton value="Aushleihen" action=""/><br/-->
+                <h:outputText value="#{item} " />
+                <h:commandButton value="Aushleihen" action="#{showmaterialview.leihen(item)}"/><br/>
             </ui:repeat>
             
             <br/>

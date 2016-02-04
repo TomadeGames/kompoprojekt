@@ -26,6 +26,10 @@ public class Model implements Serializable{
     @Inject
     private Persistence db;
     
+    public Material getMaterial(String name){
+        return this.db.getMaterial(name);
+    }
+    
     public List<String> materialNames(){
         List<String> erg = new ArrayList<>();
         this.db.getAllMaterials().stream().forEach((m) -> {
