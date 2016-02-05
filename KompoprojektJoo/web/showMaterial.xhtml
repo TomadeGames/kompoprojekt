@@ -10,23 +10,51 @@
     <h:body>
         <h:form>
             <h:outputText value="Name:"/><br/>
-            <h:inputText value="#{showmaterialview.leihename}" id ="name" required="true"/><br/>
+            <h:inputText value="#{showmaterialview.leihename}" id ="name"/><br/>
             <br/>
-            <h:outputText value="Anzahl"/><br/>
-            <h:inputText value="#{showmaterialview.anzahl}" id ="anzahl" required="true"/><br/>
+           
+            <table>
+                <tr>
+                    <td><h:outputText value="Material ID"/></td>
+                    <td><h:outputText value="Anzahl"/></td>
+                    <td><h:outputText value="von"/></td>
+                    <td><h:outputText value="bis"/></td>
+                    <td><h:outputText value="L&ouml;schen"/></td>
+                    <td></td>
+                </tr>
+                <ui:repeat value="#{showmaterialview.bestellungen}" var="bestellung">
+                    <tr>
+                        <td><h:inputText value="#{bestellung.materialId}"/></td>
+                        <td><h:inputText value="#{bestellung.anzahl}"/></td>
+                        <td><h:inputText value="#{bestellung.von}"/></td>
+                        <td><h:inputText value="#{bestellung.bis}"/></td>
+                        <td><h:commandButton value="X" action="#{showmaterialview.removeBestellung(bestellung)}"/></td>
+                        <td><h:outputText value="#{bestellung.kommentar}"/></td>
+                    </tr>
+                </ui:repeat>
+            </table>
+            
+            <h:commandButton value="+" action="#{showmaterialview.addBestellung()}"/>
+            <h:commandButton value="Bestellen" action="#{showmaterialview.leihen()}"/>
             <br/>
-            <h:outputText value="Startdatum: (yyyy MM dd)"/><br/>
-            <h:inputText value="#{showmaterialview.startdatum}" id ="startdatum" required="true"/><br/>
-            <br/>
-            <h:outputText value="Enddatum (yyyy MM dd)"/><br/>
-            <h:inputText value="#{showmaterialview.enddatum}" id ="enddatum" required="true"/><br/>
             <br/>
             <h:outputText value="Materialien:"/><br/>
-            <ui:repeat value="#{showmaterialview.materialien}" var="item">
-                <h:outputText value="#{item} " />
-                <h:commandButton value="Aushleihen" action="#{showmaterialview.leihen(item)}"/><br/>
-            </ui:repeat>
-            
+            <table>
+                <tr>
+                    <td><h:outputText value="Id"/></td>
+                    <td><h:outputText value="Material" /></td>
+                    <td><h:outputText value="Vorhanden" /></td>
+                </tr>
+                <ui:repeat value="#{showmaterialview.materialien}" var="item">
+                    <tr>
+                        <td><h:outputText value="#{item.id}"/></td>
+                        <td><h:outputText value="#{item.name}"/></td>
+                        <td><h:outputText value="#{item.anzahl}"/></td>
+                    </tr>
+                </ui:repeat>
+            </table>
+            <br/>
+            <h:outputText value="#{showmaterialview.bestellstatus}"/>
             <br/>
             <h:link value="Startseite" outcome="index"/>
         </h:form>

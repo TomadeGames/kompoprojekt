@@ -6,36 +6,39 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
  * @author woors
  */
 @Entity
-public class Material implements Serializable {
+public class GesamtLeihe implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
     private String name;
-    private int anzahl;
 
-    public Material(){
-        
-    }
     
-    public Material(String name, int anzahl){
-        this.name = name;
-        this.anzahl = anzahl;
+    @OneToMany
+    private List<Leihe> einzelleihen;
+
+    public Long getId() {
+        return id;
     }
-    
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -43,14 +46,13 @@ public class Material implements Serializable {
         return hash;
     }
 
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Material)) {
+        if (!(object instanceof GesamtLeihe)) {
             return false;
         }
-        Material other = (Material) object;
+        GesamtLeihe other = (GesamtLeihe) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -59,7 +61,7 @@ public class Material implements Serializable {
 
     @Override
     public String toString() {
-        return this.id + ": " + this.anzahl + "x " + this.name;
+        return "entity.GesamtLeihe[ id=" + id + " ]";
     }
 
     /**
@@ -77,23 +79,17 @@ public class Material implements Serializable {
     }
 
     /**
-     * @return the anzahl
+     * @return the einzelleihen
      */
-    public int getAnzahl() {
-        return anzahl;
+    public List<Leihe> getEinzelleihen() {
+        return einzelleihen;
     }
 
     /**
-     * @param anzahl the anzahl to set
+     * @param einzelleihen the einzelleihen to set
      */
-    public void setAnzahl(int anzahl) {
-        this.anzahl = anzahl;
+    public void setEinzelleihen(List<Leihe> einzelleihen) {
+        this.einzelleihen = einzelleihen;
     }
-
-    /**
-     * @return the id
-     */
-    public Long getId() {
-        return id;
-    }
+    
 }

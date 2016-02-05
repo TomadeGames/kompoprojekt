@@ -31,10 +31,10 @@ public class Persistence {
         return em.merge(object);
     }
     
-    public Material getMaterial(String name){
+    public Material getMaterial(Long materialId){
         List<Material> mats = getAllMaterials();
         for(Material m: mats){
-            if(m.getName().equals(name)){
+            if(m.getId().equals(materialId)){
                 return m;
             }
         }

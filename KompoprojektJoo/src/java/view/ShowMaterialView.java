@@ -5,16 +5,14 @@
  */
 package view;
 
+import buisnesslogic.Bestellung;
 import buisnesslogic.Model;
 import entity.Material;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.enterprise.context.RequestScoped;
+import javax.annotation.ManagedBean;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -23,33 +21,43 @@ import javax.inject.Named;
  * @author woors
  */
 @Named("showmaterialview")
-@RequestScoped
-public class ShowMaterialView {
+@SessionScoped
+@ManagedBean
+public class ShowMaterialView implements Serializable{
+    private static final long serialVersionUID=1L;
+    
     @Inject
     private Model model;
+
+    private String bestellstatus = "";
+    private String leihename = "";
+    private List<Bestellung> bestellungen = new ArrayList<>();
     
-    private String leihename;
-    private String startdatum;
-    private String enddatum;
-    private int anzahl;
-    
-    public List<String> getMaterialien(){
-        List<String> erg =  model.restMaterialien();
-        //System.out.println(erg.size());
+    public List<Material> getMaterialien(){
+        List<Material> erg =  model.restMaterialien();
         return erg;
     }
 
-    public void leihen(String item){
-        String itemName = item.split(":")[0];
-        Material m = model.getMaterial(itemName);
-        DateFormat df = new SimpleDateFormat("yyyy MM dd");
-        try {
-            Date start = df.parse(startdatum);
-            Date end = df.parse(enddatum);
-            model.addLeihe(leihename, m, anzahl, start, end);
-        } catch (ParseException ex) {
-            Logger.getLogger(ShowMaterialView.class.getName()).log(Level.SEVERE, null, ex);
+    public void leihen(){        
+        for(Bestellung b: bestellungen){
+            if(!this.model.checkLeihe(b)){
+                return;
+            }
         }
+        if(leihename == "" || leihename == null){
+            this.bestellstatus = "Kein Name angegeben";
+            return;
+        }
+        this.model.addLeihe(leihename, bestellungen);
+        this.bestellstatus = "Bestellung erfolgreich";
+    }
+    
+    public void addBestellung(){
+        bestellungen.add(new Bestellung());
+    }
+    
+    public void removeBestellung(Bestellung bestellung){
+        bestellungen.remove(bestellung);
     }
     
     /**
@@ -67,44 +75,16 @@ public class ShowMaterialView {
     }
 
     /**
-     * @return the startdatum
+     * @return the bestellungen
      */
-    public String getStartdatum() {
-        return startdatum;
+    public List<Bestellung> getBestellungen() {
+        return bestellungen;
     }
 
     /**
-     * @param startdatum the startdatum to set
+     * @return the bestellstatus
      */
-    public void setStartdatum(String startdatum) {
-        this.startdatum = startdatum;
-    }
-
-    /**
-     * @return the enddatum
-     */
-    public String getEnddatum() {
-        return enddatum;
-    }
-
-    /**
-     * @param enddatum the enddatum to set
-     */
-    public void setEnddatum(String enddatum) {
-        this.enddatum = enddatum;
-    }
-
-    /**
-     * @return the anzahl
-     */
-    public int getAnzahl() {
-        return anzahl;
-    }
-
-    /**
-     * @param anzahl the anzahl to set
-     */
-    public void setAnzahl(int anzahl) {
-        this.anzahl = anzahl;
+    public String getBestellstatus() {
+        return bestellstatus;
     }
 }

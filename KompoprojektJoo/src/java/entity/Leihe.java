@@ -25,10 +25,10 @@ public class Leihe implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String name;
+    
     @OneToOne
     private Material material;
-    private int anzahl;
+    private int anzahl;    
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date startDatum;
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -122,19 +122,4 @@ public class Leihe implements Serializable {
     public void setEndeDatum(Date endeDatum) {
         this.endeDatum = endeDatum;
     }
-
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-    
 }

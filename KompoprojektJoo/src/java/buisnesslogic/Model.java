@@ -5,16 +5,12 @@
  */
 package buisnesslogic;
 
+import entity.GesamtLeihe;
 import entity.Leihe;
 import entity.Material;
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import persistence.Persistence;
@@ -28,8 +24,8 @@ public class Model implements Serializable{
     @Inject
     private Persistence db;
     
-    public Material getMaterial(String name){
-        return this.db.getMaterial(name);
+    public Material getMaterial(Long id){
+        return this.db.getMaterial(id);
     }
     
     public List<String> materialNames(){
@@ -50,38 +46,24 @@ public class Model implements Serializable{
     
     public List<String> getLeihen(){
         List<String> erg = new ArrayList<>();
-        DateFormat formatter = new SimpleDateFormat("dd.MM.yy");
         this.db.getAllLeihen().stream().forEach((l) -> {
-            erg.add(l.getName() + ": " + l.getAnzahl() + "x " +  l.getMaterial().getName() + " von " + formatter.format(l.getStartDatum()) + " bis " + formatter.format(l.getEndeDatum()));
+            erg.add(l.getMaterial().getName() + ": " + l.getAnzahl());
         });
         return erg;
     }
     
-    public List<String> restMaterialien(){
-        List<String> erg = new ArrayList<>();
+    public List<Material> restMaterialien(){
+        List<Material> mats = this.db.getAllMaterials();
         List<Leihe> leihen = this.db.getAllLeihen();
-        Map<String, Integer> leihMap = new HashMap<>();
         
         leihen.stream().forEach((l) -> {    //Map füllen mit [Materialname], [anzahl bereits Ausgeliehen]
-            if(leihMap.containsKey(l.getMaterial().getName())){
-                int summe = leihMap.get(l.getMaterial().getName());
-                summe += l.getAnzahl();
-                leihMap.put(l.getMaterial().getName(), summe);
-            }
-            else{
-                leihMap.put(l.getMaterial().getName(), l.getAnzahl());
-            }
+            mats.stream().forEach((m) -> {
+                if(l.getMaterial().getName().equals(m.getName())){
+                    m.setAnzahl(m.getAnzahl() - l.getAnzahl());
+                }
+            });
         });
-        
-        this.db.getAllMaterials().stream().forEach((m) -> {
-            if(leihMap.get(m.getName()) != null){
-                erg.add(m.getName() + ": " + (m.getAnzahl()-leihMap.get(m.getName())));
-            }
-            else{
-                erg.add(m.getName() + ": " + m.getAnzahl());
-            }
-        });
-        return erg;
+        return mats;
     }
     
     public void addMaterial(String name, int anzahl){
@@ -93,24 +75,51 @@ public class Model implements Serializable{
         this.db.persist(m);
     }
     
-    public boolean addLeihe(String name, Material m, int anzahl, Date start, Date ende){
+    public void addLeihe(String name, List<Bestellung> bestellungen){
+        List<Leihe> leihen = new ArrayList<>();
+        for(Bestellung b: bestellungen){
+            Leihe l = new Leihe();
+            l.setAnzahl(b.getAnzahl());
+            l.setEndeDatum(b.getBisDate());
+            l.setStartDatum(b.getVonDate());
+            Material m = this.db.getMaterial(b.getMaterialId());
+            l.setMaterial(m);
+            leihen.add(l);
+            this.db.persist(l);
+        }
+        GesamtLeihe g = new GesamtLeihe();
+        g.setEinzelleihen(leihen);
+        g.setName(name);
+        this.db.persist(g);
+    }
+    
+    public boolean checkLeihe(Bestellung b){
+        if(b.getBisDate().after(b.getVonDate())){
+            b.setKommentar("Das Enddatum muss nach dem Startdatum sein");
+            return false;
+        }
+        //Prüfung ob Material existiert
+        Material m = this.db.getMaterial(b.getMaterialId());
+        if(m == null){
+            b.setKommentar("Material existiert nicht");
+            return false;
+        }
+        
+        //Prüfung auf Vorhandene Anzahl
         List<Leihe> leihen = this.db.getAllLeihen();
         int summe = 0;
         for(Leihe l: leihen){
-            if(l.getMaterial().getName().equals(m.getName())){
-                summe += l.getAnzahl();
+            if(l.getEndeDatum().before(b.getVonDate())){
+                if(l.getMaterial().getName().equals(m.getName())){
+                    summe += l.getAnzahl();
+                }
             }
         }
-        if(summe + anzahl < m.getAnzahl()){
-            Leihe newL = new Leihe();
-            newL.setAnzahl(anzahl);
-            newL.setName(name);
-            newL.setMaterial(m);
-            newL.setEndeDatum(ende);
-            newL.setStartDatum(start);
-            this.db.persist(newL);
+        if(summe + b.getAnzahl() < m.getAnzahl()){
+            b.setKommentar("");
             return true;
         }
+        b.setKommentar("So viele Artikel sind nicht verfügbar");
         return false;
     }
 }
