@@ -36,6 +36,10 @@ public class Model implements Serializable{
         return erg;
     }
     
+    public List<Material> materialien(){
+        return this.db.getAllMaterials();
+    }
+    
     public List<String> fullMaterialStrings(){
         List<String> erg = new ArrayList<>();
         this.db.getAllMaterials().stream().forEach((m) -> {
@@ -44,26 +48,12 @@ public class Model implements Serializable{
         return erg;
     }
     
-    public List<String> getLeihen(){
-        List<String> erg = new ArrayList<>();
-        this.db.getAllLeihen().stream().forEach((l) -> {
-            erg.add(l.getMaterial().getName() + ": " + l.getAnzahl());
-        });
-        return erg;
+    public List<Leihe> getLeihen(){
+        return this.db.getAllLeihen();
     }
     
-    public List<Material> restMaterialien(){
-        List<Material> mats = this.db.getAllMaterials();
-        List<Leihe> leihen = this.db.getAllLeihen();
-        
-        leihen.stream().forEach((l) -> {    //Map füllen mit [Materialname], [anzahl bereits Ausgeliehen]
-            mats.stream().forEach((m) -> {
-                if(l.getMaterial().getName().equals(m.getName())){
-                    m.setAnzahl(m.getAnzahl() - l.getAnzahl());
-                }
-            });
-        });
-        return mats;
+    public List<GesamtLeihe> getGesamtLeihen(){
+        return this.db.getGesamtLeihen();
     }
     
     public void addMaterial(String name, int anzahl){
@@ -73,6 +63,17 @@ public class Model implements Serializable{
         m.setName(name);
         m.setAnzahl(anzahl);
         this.db.persist(m);
+    }
+    
+    public boolean changeMaterial(Long id, String name, int anzahl){
+        Material mat = this.db.getMaterial(id);
+        if(mat == null){
+            return false;
+        }
+        mat.setName(name);
+        mat.setAnzahl(anzahl);
+        this.db.merge(mat);
+        return true;
     }
     
     public void addLeihe(String name, List<Bestellung> bestellungen){
@@ -94,7 +95,19 @@ public class Model implements Serializable{
     }
     
     public boolean checkLeihe(Bestellung b){
-        if(b.getBisDate().after(b.getVonDate())){
+        System.out.println(b.toString());
+        if(b.getVonDate() == null){
+            b.setKommentar("Das Startdatum fehlt");
+            return false;
+        }if(b.getBisDate() == null){
+            b.setKommentar("Das Enddatum fehlt");
+            return false;
+        }
+        if(b.getAnzahl() <=0){
+            b.setKommentar("Mindestens 1 Material muss ausgeliehen werden");
+            return false;
+        }
+        if(b.getBisDate().before(b.getVonDate())){
             b.setKommentar("Das Enddatum muss nach dem Startdatum sein");
             return false;
         }
@@ -109,13 +122,14 @@ public class Model implements Serializable{
         List<Leihe> leihen = this.db.getAllLeihen();
         int summe = 0;
         for(Leihe l: leihen){
-            if(l.getEndeDatum().before(b.getVonDate())){
+            if(!(b.getBisDate().before(l.getStartDatum()) 
+                    || b.getVonDate().after(l.getEndeDatum()))){
                 if(l.getMaterial().getName().equals(m.getName())){
                     summe += l.getAnzahl();
                 }
             }
         }
-        if(summe + b.getAnzahl() < m.getAnzahl()){
+        if(summe + b.getAnzahl() <= m.getAnzahl()){
             b.setKommentar("");
             return true;
         }

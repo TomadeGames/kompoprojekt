@@ -10,7 +10,7 @@
     <h:body>
         <h:form>
             <h:outputText value="Name:"/><br/>
-            <h:inputText value="#{showmaterialview.leihename}" id ="name"/><br/>
+            <h:inputText value="#{leiheview.leihename}" id ="name"/><br/>
             <br/>
            
             <table>
@@ -22,30 +22,34 @@
                     <td><h:outputText value="L&ouml;schen"/></td>
                     <td></td>
                 </tr>
-                <ui:repeat value="#{showmaterialview.bestellungen}" var="bestellung">
+                <ui:repeat value="#{leiheview.bestellungen}" var="bestellung">
                     <tr>
                         <td><h:inputText value="#{bestellung.materialId}"/></td>
                         <td><h:inputText value="#{bestellung.anzahl}"/></td>
                         <td><h:inputText value="#{bestellung.von}"/></td>
                         <td><h:inputText value="#{bestellung.bis}"/></td>
-                        <td><h:commandButton value="X" action="#{showmaterialview.removeBestellung(bestellung)}"/></td>
+                        <td><h:commandButton value="X" action="#{leiheview.removeBestellung(bestellung)}"/></td>
                         <td><h:outputText value="#{bestellung.kommentar}"/></td>
                     </tr>
                 </ui:repeat>
             </table>
             
-            <h:commandButton value="+" action="#{showmaterialview.addBestellung()}"/>
-            <h:commandButton value="Bestellen" action="#{showmaterialview.leihen()}"/>
+            <h:commandButton value="+" action="#{leiheview.addBestellung()}"/>
+            <h:commandButton value="Bestellen" action="#{leiheview.leihen()}"/>
             <br/>
             <br/>
+            <h:outputText value="#{leiheview.bestellstatus}"/>
+            <br/>
+            <h3>
             <h:outputText value="Materialien:"/><br/>
+            </h3>
             <table>
                 <tr>
                     <td><h:outputText value="Id"/></td>
                     <td><h:outputText value="Material" /></td>
                     <td><h:outputText value="Vorhanden" /></td>
                 </tr>
-                <ui:repeat value="#{showmaterialview.materialien}" var="item">
+                <ui:repeat value="#{leiheview.materialien}" var="item">
                     <tr>
                         <td><h:outputText value="#{item.id}"/></td>
                         <td><h:outputText value="#{item.name}"/></td>
@@ -54,7 +58,27 @@
                 </ui:repeat>
             </table>
             <br/>
-            <h:outputText value="#{showmaterialview.bestellstatus}"/>
+            <h3>
+                <h:outputText value="Leihen:"/>
+            </h3>
+            <table>
+                <tr>
+                    <td><h:outputText value="Name"/></td>
+                    <td><h:outputText value="Material" /></td>
+                    <td><h:outputText value="Anzahl" /></td>
+                    <td><h:outputText value="Von" /></td>
+                    <td><h:outputText value="Bis" /></td>
+                </tr>
+                <ui:repeat value="#{leiheview.allLeihen}" var="item">
+                    <tr>
+                        <td><h:outputText value="#{item.name}"/></td>
+                        <td><h:outputText value="#{item.material}"/></td>
+                        <td><h:outputText value="#{item.anzahl}"/></td>
+                        <td><h:outputText value="#{item.von}"/></td>
+                        <td><h:outputText value="#{item.bis}"/></td>
+                    </tr>
+                </ui:repeat>
+            </table>
             <br/>
             <h:link value="Startseite" outcome="index"/>
         </h:form>

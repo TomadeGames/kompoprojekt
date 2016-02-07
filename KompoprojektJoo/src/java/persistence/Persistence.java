@@ -5,6 +5,7 @@
  */
 package persistence;
 
+import entity.GesamtLeihe;
 import entity.Leihe;
 import entity.Material;
 import java.util.List;
@@ -47,5 +48,9 @@ public class Persistence {
     
     public List<Leihe> getAllLeihen(){
         return em.createQuery("SELECT a FROM Leihe a", Leihe.class).getResultList();
+    }
+    
+    public List<GesamtLeihe> getGesamtLeihen(){
+        return em.createQuery("SELECT a FROM GesamtLeihe a", GesamtLeihe.class).getResultList();
     }
 }

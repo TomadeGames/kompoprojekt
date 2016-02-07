@@ -8,12 +8,14 @@
     </h:head>
     <h:body>
         <h:form>
+            <h:outputText value="Id:"/><br/>
+            <h:inputText value="#{addmaterialview.materialId}" id="materialId"/><br/>
             <h:outputText value="Materialname:"/><br/>
             <h:inputText value="#{addmaterialview.materialname}" id="materialName"/><br/>
             <h:outputText value="Anzahl:"/><br/>
             <h:inputText value="#{addmaterialview.materialanzahl}" id="materialAnzahl"/><br/>
             <br/>
-            <h:commandButton value="Material einlagern" action="#{addmaterialview.addNewMaterial()}"/><br/>
+            <h:commandButton value="Material einlagern" action="#{addmaterialview.changeMaterial()}"/><br/>
             <br/>
             <h:outputText value="#{addmaterialview.einfuegStatus}"/><br/>
             <br/>

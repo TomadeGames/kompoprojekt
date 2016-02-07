@@ -27,6 +27,7 @@ public class AddMaterialView implements Serializable{
     private String materialname;
     private int materialanzahl;
     private String einfuegStatus = "";
+    private Long materialId;
 
     /**
      * @return the materialName
@@ -58,12 +59,43 @@ public class AddMaterialView implements Serializable{
     
     public void addNewMaterial(){
         try{
-            model.addMaterial(materialname, materialanzahl);
-            einfuegStatus = materialname + " erfolgreich hinzugefügt";
+            if(this.materialname == null || this.materialname.equals("")){
+                this.einfuegStatus = "Kein Name angegeben";
+                return;
+            }
+            if(this.materialanzahl < 1){
+                this.einfuegStatus = "Mindestens ein Material muss eingelagert werden";
+                return;
+            }
+            this.model.addMaterial(this.materialname, this.materialanzahl);
+            this.einfuegStatus = this.materialname + " erfolgreich hinzugefügt";
         }
         catch(EJBException e){
             System.out.println("Exception: " + e);
-            einfuegStatus = materialname + " existiert bereits";
+            this.einfuegStatus = this.materialname + " existiert bereits";
+        }
+    }
+    
+    public void changeMaterial(){
+        try{
+            if(this.materialname == null || this.materialname.equals("")){
+                this.einfuegStatus = "Kein Name angegeben";
+                return;
+            }
+            if(this.materialanzahl < 1){
+                this.einfuegStatus = "Mindestens ein Material muss eingelagert werden";
+                return;
+            }
+            if(model.changeMaterial(getMaterialId(), this.materialname, this.materialanzahl)){
+                einfuegStatus = this.materialname + " erfolgreich hinzugefügt";                
+            }
+            else{
+                this.einfuegStatus = "ID nicht gefunden";
+            }
+        }
+        catch(EJBException e){
+            System.out.println("Exception: " + e);
+            this.einfuegStatus = this.materialname + " existiert bereits";
         }
     }
 
@@ -71,7 +103,21 @@ public class AddMaterialView implements Serializable{
      * @return the einfuegStatus
      */
     public String getEinfuegStatus() {
-        return einfuegStatus;
+        return this.einfuegStatus;
+    }
+
+    /**
+     * @return the materialId
+     */
+    public Long getMaterialId() {
+        return this.materialId;
+    }
+
+    /**
+     * @param materialId the materialId to set
+     */
+    public void setMaterialId(Long materialId) {
+        this.materialId = materialId;
     }
     
 }

@@ -117,7 +117,7 @@ public class Bestellung {
         else{
             System.out.println("SetBis: " + bis);
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            this.von = df.parse(bis);
+            this.bis = df.parse(bis);
         }
     }
 
@@ -133,5 +133,11 @@ public class Bestellung {
      */
     public void setKommentar(String kommentar) {
         this.kommentar = kommentar;
+    }
+    
+    @Override
+    public String toString(){
+        return this.anzahl + "x mat: " + this.materialId + " von: " 
+                + this.getVon() + " bis: " + this.getBis() + " kommentar: " + this.kommentar;
     }
 }
