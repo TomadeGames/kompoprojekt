@@ -28,6 +28,16 @@ public class Model implements Serializable{
         return this.db.getMaterial(id);
     }
     
+    public Material getMaterial(String name){
+        List<Material> mats = this.db.getAllMaterials();
+        for(Material m: mats){
+            if(m.getName().equals(name)){
+                return m;
+            }
+        }
+        return null;
+    }
+    
     public List<String> materialNames(){
         List<String> erg = new ArrayList<>();
         this.db.getAllMaterials().stream().forEach((m) -> {
