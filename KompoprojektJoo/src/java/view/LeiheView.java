@@ -137,7 +137,6 @@ public class LeiheView implements Serializable{
         mats.stream().forEach((m) -> {
             materialienMap.put(m.getName(), m.getId());
         });
-        System.out.println("Map size: " + materialienMap.size());
         return materialienMap;
     }
 }

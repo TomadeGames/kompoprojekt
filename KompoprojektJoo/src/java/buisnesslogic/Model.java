@@ -50,6 +50,10 @@ public class Model implements Serializable{
         return this.db.getAllMaterials();
     }
     
+    public List<Material> allMaterials(){
+        return this.db.getAllAndRemovedMaterials();
+    }
+    
     public List<String> fullMaterialStrings(){
         List<String> erg = new ArrayList<>();
         this.db.getAllMaterials().stream().forEach((m) -> {
@@ -67,7 +71,7 @@ public class Model implements Serializable{
     }
     
     public void removeMaterial(Material mat){
-        mat.setGeloescht(true);
+        mat.setGeloescht(!mat.isGeloescht());
         this.db.merge(mat);
     }
     

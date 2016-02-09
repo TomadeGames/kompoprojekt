@@ -3,6 +3,7 @@ package view;
 import buisnesslogic.Model;
 import entity.Material;
 import java.io.Serializable;
+import java.util.List;
 import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -79,6 +80,17 @@ public class AddMaterialView implements Serializable{
             System.out.println("Exception: " + e);
             this.einfuegStatus = this.materialname + " existiert bereits";
         }
+    }
+    
+    public String isDeletet(Material m){
+        if(m.isGeloescht()){
+            return "+";
+        }
+        return "X";
+    }
+    
+    public List<Material> getAllMaterialien(){
+        return this.model.allMaterials();
     }
     
     public void changeMaterial(){
