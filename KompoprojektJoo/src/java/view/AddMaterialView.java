@@ -1,6 +1,7 @@
 package view;
 
 import buisnesslogic.Model;
+import entity.Material;
 import java.io.Serializable;
 import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
@@ -55,6 +56,10 @@ public class AddMaterialView implements Serializable{
      */
     public void setMaterialanzahl(int materialanzahl) {
         this.materialanzahl = materialanzahl;
+    }
+    
+    public void loeschen(Material item){
+        this.model.removeMaterial(item);
     }
     
     public void addNewMaterial(){

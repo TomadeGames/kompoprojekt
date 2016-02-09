@@ -8,6 +8,7 @@ package persistence;
 import entity.GesamtLeihe;
 import entity.Leihe;
 import entity.Material;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -32,6 +33,10 @@ public class Persistence {
         return em.merge(object);
     }
     
+    public void remove(Object object){
+        em.remove(em.merge(object));
+    }
+    
     public Material getMaterial(Long materialId){
         List<Material> mats = getAllMaterials();
         for(Material m: mats){
@@ -42,8 +47,19 @@ public class Persistence {
         return null;
     }
     
-    public List<Material> getAllMaterials(){
+    public List<Material> getAllAndRemovedMaterials(){
         return em.createQuery("SELECT a FROM Material a", Material.class).getResultList();
+    }
+    
+    public List<Material> getAllMaterials(){
+        List<Material> mats = em.createQuery("SELECT a FROM Material a", Material.class).getResultList();
+        List<Material> erg = new ArrayList<>();
+        mats.stream().forEach((m) -> {
+            if(!m.isGeloescht()){
+                erg.add(m);
+            }
+        });
+        return erg;
     }
     
     public List<Leihe> getAllLeihen(){

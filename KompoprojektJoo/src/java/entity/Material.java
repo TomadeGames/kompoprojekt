@@ -26,9 +26,10 @@ public class Material implements Serializable {
     
     private String name;
     private int anzahl;
+    private boolean geloescht;
 
     public Material(){
-        
+        geloescht = false;
     }
     
     public Material(String name, int anzahl){
@@ -95,5 +96,19 @@ public class Material implements Serializable {
      */
     public Long getId() {
         return id;
+    }
+
+    /**
+     * @return the geloescht
+     */
+    public boolean isGeloescht() {
+        return geloescht;
+    }
+
+    /**
+     * @param geloescht the geloescht to set
+     */
+    public void setGeloescht(boolean geloescht) {
+        this.geloescht = geloescht;
     }
 }

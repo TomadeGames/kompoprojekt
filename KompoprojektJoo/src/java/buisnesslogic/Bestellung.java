@@ -16,37 +16,11 @@ import java.util.Date;
  * Hilfsklasse zum Bestellen von Materialien
  */
 public class Bestellung {
-    private Long materialId;
     private int anzahl;
     private Date von;
     private Date bis;
     private String kommentar;
-    
-    public Bestellung(){
-        
-    }
-    
-    public Bestellung(Long materialId, int anzahl, Date von, Date bis, String kommentar){
-        this.materialId = materialId;
-        this.anzahl = anzahl;
-        this.von = von;
-        this.bis = bis;
-        this.kommentar = kommentar;
-    }
-
-    /**
-     * @return the materialId
-     */
-    public Long getMaterialId() {
-        return materialId;
-    }
-
-    /**
-     * @param materialId the materialId to set
-     */
-    public void setMaterialId(Long materialId) {
-        this.materialId = materialId;
-    }
+    private Long materialId;
 
     /**
      * @return the anzahl
@@ -118,6 +92,7 @@ public class Bestellung {
             System.out.println("SetBis: " + bis);
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             this.bis = df.parse(bis);
+
         }
     }
 
@@ -134,10 +109,18 @@ public class Bestellung {
     public void setKommentar(String kommentar) {
         this.kommentar = kommentar;
     }
-    
-    @Override
-    public String toString(){
-        return this.anzahl + "x mat: " + this.materialId + " von: " 
-                + this.getVon() + " bis: " + this.getBis() + " kommentar: " + this.kommentar;
+
+    /**
+     * @return the materialId
+     */
+    public Long getMaterialId() {
+        return materialId;
+    }
+
+    /**
+     * @param materialId the materialId to set
+     */
+    public void setMaterialId(Long materialId) {
+        this.materialId = materialId;
     }
 }

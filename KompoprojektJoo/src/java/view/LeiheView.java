@@ -13,7 +13,9 @@ import entity.Leihe;
 import entity.Material;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.ManagedBean;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
@@ -35,6 +37,7 @@ public class LeiheView implements Serializable{
     private String bestellstatus = "";
     private String leihename = "";
     private List<Bestellung> bestellungen = new ArrayList<>();
+    private Map<String, Long> materialienMap;
     
     public LeiheView(){
         bestellungen.add(new Bestellung());
@@ -51,7 +54,7 @@ public class LeiheView implements Serializable{
         leihen.stream().forEach((l) -> {
             List<Leihe> einzel = l.getEinzelleihen();
             einzel.stream().forEach((e) -> {
-                erg.add(new LeihPreview(e.getMaterial().getName(), l.getName()
+                erg.add(new LeihPreview(e.getId(), e.getMaterial().getName(), l.getName()
                         , e.getAnzahl(), e.getStartDatum(), e.getEndeDatum()));
             });
         });
@@ -73,6 +76,10 @@ public class LeiheView implements Serializable{
             return;
         }
         this.model.addLeihe(leihename, bestellungen);
+        this.leihename = "";
+        this.bestellungen.removeAll(bestellungen);
+        this.bestellungen.add(new Bestellung());
+        
         this.bestellstatus = "Bestellung erfolgreich";
     }
     
@@ -82,6 +89,15 @@ public class LeiheView implements Serializable{
     
     public void removeBestellung(Bestellung bestellung){
         bestellungen.remove(bestellung);
+    }
+    
+    public void removeLeihe(LeihPreview l){
+        System.out.println("Leihpreview Id: " + l.getId());
+        Leihe leihe = this.model.getLeihe(l.getId());
+        if(leihe == null){
+            System.out.println("Fehlerhafte Leihe!!!!!");
+        }
+        this.model.removeLeihe(leihe);
     }
     
     /**
@@ -110,5 +126,18 @@ public class LeiheView implements Serializable{
      */
     public String getBestellstatus() {
         return bestellstatus;
+    }
+
+    /**
+     * @return the materialienMap
+     */
+    public Map<String, Long> getMaterialienMap() {
+        materialienMap = new HashMap();
+        List<Material> mats = this.model.materialien();
+        mats.stream().forEach((m) -> {
+            materialienMap.put(m.getName(), m.getId());
+        });
+        System.out.println("Map size: " + materialienMap.size());
+        return materialienMap;
     }
 }

@@ -66,6 +66,11 @@ public class Model implements Serializable{
         return this.db.getGesamtLeihen();
     }
     
+    public void removeMaterial(Material mat){
+        mat.setGeloescht(true);
+        this.db.merge(mat);
+    }
+    
     public void addMaterial(String name, int anzahl){
         Material m = new Material();
         System.out.println(name);
@@ -84,6 +89,31 @@ public class Model implements Serializable{
         mat.setAnzahl(anzahl);
         this.db.merge(mat);
         return true;
+    }
+    
+    public void removeLeihe(Leihe l){
+        List<GesamtLeihe> gls = this.db.getGesamtLeihen();
+        for(GesamtLeihe gl: gls){
+            List<Leihe> newList = new ArrayList<>();
+            for(Leihe leihe: gl.getEinzelleihen()){
+                if(!leihe.equals(l)){
+                    newList.add(leihe);
+                }
+            }
+            gl.setEinzelleihen(newList);
+            this.db.merge(gl);
+        }
+        this.db.remove(l);
+    }
+    
+    public Leihe getLeihe(Long id){
+        List<Leihe> leihen = this.db.getAllLeihen();
+        for(Leihe l: leihen){
+            if(l.getId().equals(id)){
+                return l;
+            }
+        }
+        return null;
     }
     
     public void addLeihe(String name, List<Bestellung> bestellungen){

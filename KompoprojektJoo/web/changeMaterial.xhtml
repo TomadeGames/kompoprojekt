@@ -24,12 +24,14 @@
                     <td><h:outputText value="Id"/></td>
                     <td><h:outputText value="Material" /></td>
                     <td><h:outputText value="Vorhanden" /></td>
+                    <td><h:outputText value="L&ouml;schen"/></td>
                 </tr>
                 <ui:repeat value="#{leiheview.materialien}" var="item">
                     <tr>
                         <td><h:outputText value="#{item.id}"/></td>
                         <td><h:outputText value="#{item.name}"/></td>
                         <td><h:outputText value="#{item.anzahl}"/></td>
+                        <td><h:commandButton value="X" action="#{addmaterialview.loeschen(item)}"/></td>
                     </tr>
                 </ui:repeat>
             </table>

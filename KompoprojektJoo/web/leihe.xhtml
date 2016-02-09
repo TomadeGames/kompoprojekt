@@ -3,31 +3,42 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:c="http://java.sun.com/jsp/jstl/core">
+      xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
         <title>Materialien</title>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"/>
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script src="js/datepicker.js"></script>
     </h:head>
     <h:body>
         <h:form>
             <h:outputText value="Name:"/><br/>
             <h:inputText value="#{leiheview.leihename}" id ="name"/><br/>
             <br/>
-           
             <table>
                 <tr>
                     <td><h:outputText value="Material ID"/></td>
                     <td><h:outputText value="Anzahl"/></td>
-                    <td><h:outputText value="von"/></td>
-                    <td><h:outputText value="bis"/></td>
+                    <td><h:outputText value="von (YYYY-MM-DD)"/></td>
+                    <td><h:outputText value="bis (YYYY-MM-DD)"/></td>
                     <td><h:outputText value="L&ouml;schen"/></td>
                     <td></td>
                 </tr>
                 <ui:repeat value="#{leiheview.bestellungen}" var="bestellung">
                     <tr>
-                        <td><h:inputText value="#{bestellung.materialId}"/></td>
+                        <td>
+                            <h:selectOneMenu  value="#{bestellung.materialId}">
+                                <f:selectItems value="#{leiheview.materialienMap}" />
+                            </h:selectOneMenu >
+                        </td>
                         <td><h:inputText value="#{bestellung.anzahl}"/></td>
-                        <td><h:inputText value="#{bestellung.von}"/></td>
-                        <td><h:inputText value="#{bestellung.bis}"/></td>
+                        <td>
+                            <h:inputText styleClass = "datepicker" value="#{bestellung.von}"></h:inputText>
+                        </td>
+                        <td>
+                            <h:inputText styleClass = "datepicker" value="#{bestellung.bis}"></h:inputText>
+                        </td>
                         <td><h:commandButton value="X" action="#{leiheview.removeBestellung(bestellung)}"/></td>
                         <td><h:outputText value="#{bestellung.kommentar}"/></td>
                     </tr>
@@ -68,6 +79,7 @@
                     <td><h:outputText value="Anzahl" /></td>
                     <td><h:outputText value="Von" /></td>
                     <td><h:outputText value="Bis" /></td>
+                    <td><h:outputText value="L&ouml;schen"/></td>
                 </tr>
                 <ui:repeat value="#{leiheview.allLeihen}" var="item">
                     <tr>
@@ -76,6 +88,7 @@
                         <td><h:outputText value="#{item.anzahl}"/></td>
                         <td><h:outputText value="#{item.von}"/></td>
                         <td><h:outputText value="#{item.bis}"/></td>
+                        <td><h:commandButton value="X" action="#{leiheview.removeLeihe(item)}"/></td>
                     </tr>
                 </ui:repeat>
             </table>

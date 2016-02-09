@@ -19,17 +19,19 @@ public class LeihPreview {
     private int anzahl;
     private Date von;
     private Date bis;
+    private Long id;
     
     public LeihPreview(){
         
     }
     
-    public LeihPreview(String material, String name, int anzahl, Date von, Date bis){
+    public LeihPreview(Long id, String material, String name, int anzahl, Date von, Date bis){
         this.material = material;
         this.name = name;
         this.anzahl = anzahl;
         this.von = von;
         this.bis = bis;
+        this.id = id;
     }
 
     /**
@@ -108,5 +110,19 @@ public class LeihPreview {
      */
     public void setBis(Date bis) {
         this.bis = bis;
+    }
+
+    /**
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
     }
 }
