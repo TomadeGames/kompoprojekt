@@ -62,7 +62,13 @@ public class LeiheView implements Serializable{
     }
 
     public void leihen(){        
+        List<Long> matIds = new ArrayList<>();
         for(Bestellung b: bestellungen){
+            if(matIds.contains(b.getMaterialId())){
+                this.bestellstatus = "Es kann nicht ein Material mehrmals ausgewählt werden";
+                return;
+            }
+            matIds.add(b.getMaterialId());
             if(!this.model.checkLeihe(b)){
                 return;
             }

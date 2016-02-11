@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="250" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kompoclient.addMaterialController">
+    <children>
+        <Label layoutX="50" layoutY="10" minHeight="16" minWidth="69" fx:id="materialLabel" text="Material"/>
+        <TextField layoutX="50" layoutY="30" fx:id="materialName"/>
+        <Label layoutX="50" layoutY="60" minHeight="16" minWidth="69" fx:id="anzahlLabel" text="Anzahl"/>
+        <TextField layoutX="50" layoutY="80" fx:id="anzahl"/>
+        <Button layoutX="100" layoutY="120" text="Material Hinzufügen" onAction="#handleButtonAction" fx:id="button" />
+        <Button layoutX="0" layoutY="120" text="Zurück" onAction="#handleBackAction" fx:id="backButton"/> 
+        
+    </children>
+</AnchorPane>
