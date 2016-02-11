@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- *
+ * Hilfsklasse zum Anzeigen von Leihen
  * @author woors
  */
 public class LeihPreview {

@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- *
+ * Erstellt EntityManager
  * @author denrieke
  */
 public class Producer {

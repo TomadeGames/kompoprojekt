@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import persistence.Persistence;
 
 /**
- *
+ * Logik zwischen Persistance und View
  * @author denrieke
  */
 @Dependent
@@ -24,10 +24,20 @@ public class Model implements Serializable{
     @Inject
     private Persistence db;
     
+    /**
+     * Gibt Material von DB, anhand von ID, zurück.
+     * @param id Id des angeforderten Materials
+     * @return angefordertes Material
+     */
     public Material getMaterial(Long id){
         return this.db.getMaterial(id);
     }
     
+    /**
+     * Gibt Material von DB, anhand von Name, zurück.
+     * @param name Name des Materials
+     * @return gefordertes Material
+     */
     public Material getMaterial(String name){
         List<Material> mats = this.db.getAllMaterials();
         for(Material m: mats){
@@ -38,6 +48,10 @@ public class Model implements Serializable{
         return null;
     }
     
+    /**
+     * Gibt Namen aller Materialien von DB zurück.
+     * @return alle Materialnamen
+     */
     public List<String> materialNames(){
         List<String> erg = new ArrayList<>();
         this.db.getAllMaterials().stream().forEach((m) -> {
@@ -46,14 +60,26 @@ public class Model implements Serializable{
         return erg;
     }
     
+    /**
+     * Gibt alle Materialien der DB zurück.
+     * @return alle Materialien
+     */
     public List<Material> materialien(){
         return this.db.getAllMaterials();
     }
     
+    /**
+     * Gibt alle Materialien, inklusive gelöschte, der DB zurück.
+     * @return alle Materialien
+     */
     public List<Material> allMaterials(){
         return this.db.getAllAndRemovedMaterials();
     }
     
+    /**
+     * Gibt für jedes Material einen String (Name:Anzahl) zurück.
+     * @return String für jedes Material
+     */
     public List<String> fullMaterialStrings(){
         List<String> erg = new ArrayList<>();
         this.db.getAllMaterials().stream().forEach((m) -> {
@@ -62,19 +88,36 @@ public class Model implements Serializable{
         return erg;
     }
     
+    /**
+     * Gibt alle Leihen der DB zurück.
+     * @return alle Leihen
+     */
     public List<Leihe> getLeihen(){
         return this.db.getAllLeihen();
     }
     
+    /**
+     * Gibt alle Gesamtleihen der DB zurück.
+     * @return alle Gesamtleihen
+     */
     public List<GesamtLeihe> getGesamtLeihen(){
         return this.db.getGesamtLeihen();
     }
     
+    /**
+     * Löscht Material aus DB
+     * @param mat zu löschendes Material
+     */
     public void removeMaterial(Material mat){
         mat.setGeloescht(!mat.isGeloescht());
         this.db.merge(mat);
     }
     
+    /**
+     * Fügt Material in DB ein.
+     * @param name Name des Material
+     * @param anzahl Anzahl des Material
+     */
     public void addMaterial(String name, int anzahl){
         Material m = new Material();
         System.out.println(name);
@@ -84,6 +127,13 @@ public class Model implements Serializable{
         this.db.persist(m);
     }
     
+    /**
+     * Sucht Material anhand von ID aus DB und ändert dies dann.
+     * @param id ID des zu ändernden Materials
+     * @param name neuer Name des Materials
+     * @param anzahl neue Anzahl des Materials
+     * @return gibt zurück ob Material gefunden
+     */
     public boolean changeMaterial(Long id, String name, int anzahl){
         Material mat = this.db.getMaterial(id);
         if(mat == null){
@@ -95,6 +145,10 @@ public class Model implements Serializable{
         return true;
     }
     
+    /**
+     * Löscht Leihe aus DB
+     * @param l zu löschende Leihe
+     */
     public void removeLeihe(Leihe l){
         List<GesamtLeihe> gls = this.db.getGesamtLeihen();
         for(GesamtLeihe gl: gls){
@@ -110,6 +164,11 @@ public class Model implements Serializable{
         this.db.remove(l);
     }
     
+    /**
+     * Gibt Leihe anhand von ID aus DB zurück.
+     * @param id ID der Leihe
+     * @return gesuchte Leihe
+     */
     public Leihe getLeihe(Long id){
         List<Leihe> leihen = this.db.getAllLeihen();
         for(Leihe l: leihen){
@@ -120,6 +179,11 @@ public class Model implements Serializable{
         return null;
     }
     
+    /**
+     * Fügt GesamtLeihe in DB ein.
+     * @param name Name des Leihers
+     * @param bestellungen einzelne Bestellungen
+     */
     public void addLeihe(String name, List<Bestellung> bestellungen){
         List<Leihe> leihen = new ArrayList<>();
         for(Bestellung b: bestellungen){
@@ -138,6 +202,11 @@ public class Model implements Serializable{
         this.db.persist(g);
     }
     
+    /**
+     * Prüft ob eine Bestellung gültig ist.
+     * @param b zu prüfende Bestellung
+     * @return ob Bestellung gültig ist
+     */
     public boolean checkLeihe(Bestellung b){
         System.out.println(b.toString());
         if(b.getVonDate() == null){

@@ -14,7 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 /**
- *
+ * Sammlung von mehreren Materialien, für eine Ausleihe.
  * @author woors
  */
 @Entity

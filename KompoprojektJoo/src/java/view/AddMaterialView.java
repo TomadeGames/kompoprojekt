@@ -16,7 +16,7 @@ import javax.inject.Named;
  */
 
 /**
- *
+ * View zum bearbeiten von Materialien.
  * @author denrieke
  */
 
@@ -59,10 +59,18 @@ public class AddMaterialView implements Serializable{
         this.materialanzahl = materialanzahl;
     }
     
+    /**
+     * Löscht Material aus DB.
+     * @param item zu löschendes Material
+     */
     public void loeschen(Material item){
         this.model.removeMaterial(item);
     }
     
+    /**
+     * Neues Material in der DB anlegen.
+     * Aufruf über Button.
+     */
     public void addNewMaterial(){
         try{
             if(this.materialname == null || this.materialname.equals("")){
@@ -82,6 +90,11 @@ public class AddMaterialView implements Serializable{
         }
     }
     
+    /**
+     * Prüft ob Material gelöscht wurde. 
+     * @param m zu prüfendes Material
+     * @return Beschriftung für den Löschen/Hinzufügen Button 
+     */
     public String isDeletet(Material m){
         if(m.isGeloescht()){
             return "+";
@@ -89,10 +102,17 @@ public class AddMaterialView implements Serializable{
         return "X";
     }
     
+    /**
+     * Gibt alle Materialien der DB zurück.
+     * @return alle Materialien
+     */
     public List<Material> getAllMaterialien(){
         return this.model.allMaterials();
     }
     
+    /**
+     * Ändern eines Materials.
+     */
     public void changeMaterial(){
         try{
             if(this.materialname == null || this.materialname.equals("")){

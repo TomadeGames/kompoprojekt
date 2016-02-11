@@ -22,7 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
- *
+ * View zum Ausleihen von Materialien.
  * @author woors
  */
 @Named("leiheview")
@@ -43,11 +43,19 @@ public class LeiheView implements Serializable{
         bestellungen.add(new Bestellung());
     }
     
+    /**
+     * Gibt alle Materialien der DB zurück.
+     * @return alle Materialien
+     */
     public List<Material> getMaterialien(){
         List<Material> erg =  model.materialien();
         return erg;
     }
     
+    /**
+     * Gibt alle Leihen der DB zurück.
+     * @return alle Leihen
+     */
     public List<LeihPreview> getAllLeihen(){
         List<LeihPreview> erg = new ArrayList<>();
         List<GesamtLeihe> leihen = this.model.getGesamtLeihen();
@@ -61,6 +69,9 @@ public class LeiheView implements Serializable{
         return erg;
     }
 
+    /**
+     * Ausleihen eines Materials.
+     */
     public void leihen(){        
         List<Long> matIds = new ArrayList<>();
         for(Bestellung b: bestellungen){
@@ -89,14 +100,25 @@ public class LeiheView implements Serializable{
         this.bestellstatus = "Bestellung erfolgreich";
     }
     
+    /**
+     * Bestellung hinzufügen.
+     */
     public void addBestellung(){
         bestellungen.add(new Bestellung());
     }
     
+    /**
+     * Bestellung entfernen.
+     * @param bestellung 
+     */
     public void removeBestellung(Bestellung bestellung){
         bestellungen.remove(bestellung);
     }
     
+    /**
+     * Leihe aus DB entfernen.
+     * @param l zu entfernende Leihe
+     */
     public void removeLeihe(LeihPreview l){
         System.out.println("Leihpreview Id: " + l.getId());
         Leihe leihe = this.model.getLeihe(l.getId());
