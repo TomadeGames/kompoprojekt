@@ -22,7 +22,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -37,24 +40,33 @@ public class LeiheViewController implements Initializable {
 
     @FXML
     private TextField name;
-    
     @FXML
     private ChoiceBox materialName0;
-    
     @FXML
     private TextField anzahl0;
-    
     @FXML
     private DatePicker von0;
-    
     @FXML
     private DatePicker bis0;
-    
     @FXML
     private Label statusLabel;
+    @FXML
+    private TableView<Leihe> leiheTable;
+    @FXML
+    private TableColumn<Leihe, String> idColumn;
+    @FXML
+    private TableColumn<Leihe, String> materialColumn;
+    @FXML
+    private TableColumn<Leihe, String> anzahlColumn;
+    @FXML
+    private TableColumn<Leihe, String> vonColumn;
+    @FXML
+    private TableColumn<Leihe, String> bisColumn;
     
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -62,7 +74,12 @@ public class LeiheViewController implements Initializable {
         for(Material m: mats){
             materialName0.getItems().add(m.getName());            
         }
-        // TODO
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("idProperty"));
+        materialColumn.setCellValueFactory(new PropertyValueFactory<>("materialProperty"));
+        anzahlColumn.setCellValueFactory(new PropertyValueFactory<>("anzahlProperty"));
+        vonColumn.setCellValueFactory(new PropertyValueFactory<>("vonProperty"));
+        bisColumn.setCellValueFactory(new PropertyValueFactory<>("bisProperty"));
+        leiheTable.getItems().setAll(Persistence.getLeihen());
     }    
     
         

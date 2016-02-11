@@ -28,5 +28,27 @@
         <Label layoutX="100" layoutY="120" fx:id="statusLabel" text=""/> 
         
         <Button layoutX="30" layoutY="180" text="Material Hinzufügen" onAction="#handleLeiheAction" fx:id="leiheButton"/>   
+
+        <Label layoutX="300" layoutY="220" text="Leihen"/> 
+        <TableView layoutX="10" layoutY="250" minWidth="680" maxHeight="200" fx:id="leiheTable">
+            <columns>
+                <TableColumn fx:id="idColumn" prefWidth="136"  text="Id">
+ 
+                </TableColumn>
+                <TableColumn fx:id="materialColumn" prefWidth="136" text="Material">
+
+                </TableColumn>
+                <TableColumn fx:id="anzahlColumn" prefWidth="136" text="Anzahl">
+
+                </TableColumn>
+                 <TableColumn fx:id="vonColumn" prefWidth="136" text="Von">
+
+                </TableColumn>
+                <TableColumn fx:id="bisColumn" prefWidth="136" text="Bis">
+
+                </TableColumn>
+            </columns>
+
+        </TableView>
     </children>
 </AnchorPane>

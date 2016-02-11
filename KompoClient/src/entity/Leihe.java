@@ -5,7 +5,11 @@
  */
 package entity;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import javafx.beans.property.SimpleStringProperty;
+import persistence.Persistence;
 
 /**
  *
@@ -14,15 +18,32 @@ import java.util.Date;
 public class Leihe {
     private Long id;
     private Long materialId;
-    private int Anzahl;
+    private int anzahl;
     private Date von;
     private Date bis;
+    
+    private final SimpleStringProperty idProperty;
+    private final SimpleStringProperty materialProperty;
+    private final SimpleStringProperty anzahlProperty;
+    private final SimpleStringProperty vonProperty;
+    private final SimpleStringProperty bisProperty;
 
+    public Leihe(){
+        idProperty = new SimpleStringProperty();
+        materialProperty = new SimpleStringProperty();
+        anzahlProperty = new SimpleStringProperty();
+        vonProperty = new SimpleStringProperty();
+        bisProperty = new SimpleStringProperty();
+    }
     /**
      * @return the id
      */
     public Long getId() {
         return id;
+    }
+    
+    public String getIdProperty(){
+        return idProperty.get();
     }
 
     /**
@@ -30,6 +51,7 @@ public class Leihe {
      */
     public void setId(Long id) {
         this.id = id;
+        idProperty.set(""+ id);
     }
 
     /**
@@ -38,26 +60,37 @@ public class Leihe {
     public Long getMaterialId() {
         return materialId;
     }
+    
+    public String getMaterialProperty() {
+        return this.materialProperty.get();
+    }
 
     /**
      * @param materialId the material to set
      */
     public void setMaterialId(Long materialId) {
         this.materialId = materialId;
+        String value = Persistence.getMaterial(materialId).getName();
+        materialProperty.set(value);
     }
 
     /**
-     * @return the Anzahl
+     * @return the anzahl
      */
     public int getAnzahl() {
-        return Anzahl;
+        return anzahl;
+    }
+    
+    public String getAnzahlProperty() {
+        return this.anzahlProperty.get();
     }
 
     /**
-     * @param Anzahl the Anzahl to set
+     * @param anzahl the anzahl to set
      */
-    public void setAnzahl(int Anzahl) {
-        this.Anzahl = Anzahl;
+    public void setAnzahl(int anzahl) {
+        this.anzahl = anzahl;
+        this.anzahlProperty.set("" + anzahl);
     }
 
     /**
@@ -66,12 +99,18 @@ public class Leihe {
     public Date getVon() {
         return von;
     }
+    
+    public String getVonProperty() {
+        return this.vonProperty.get();
+    }
 
     /**
      * @param von the von to set
      */
     public void setVon(Date von) {
         this.von = von;
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        this.vonProperty.set(df.format(von));
     }
 
     /**
@@ -81,10 +120,15 @@ public class Leihe {
         return bis;
     }
 
+    public String getBisProperty(){
+        return this.bisProperty.get();
+    }
     /**
      * @param bis the bis to set
      */
     public void setBis(Date bis) {
         this.bis = bis;
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        this.bisProperty.set(df.format(bis));
     }
 }
