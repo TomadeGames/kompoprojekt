@@ -12,7 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- *
+ * Das Material, dass ausgeliehen werden kann.
  * @author woors
  */
 @Entity
@@ -31,7 +31,11 @@ public class Material implements Serializable {
     public Material(){
         geloescht = false;
     }
-    
+    /**
+     * Material erzeugen.
+     * @param name Der Name des Materials
+     * @param anzahl Die maximale Anzahl
+     */
     public Material(String name, int anzahl){
         this.name = name;
         this.anzahl = anzahl;

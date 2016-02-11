@@ -15,7 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 
 /**
- *
+ * Ausleihe für ein einzelnes Material mit Zeitspanne und Anzahl.
  * @author woors
  */
 @Entity

@@ -47,6 +47,10 @@ public class Bestellung {
         return df.format(von);
     }
 
+    /**
+     *
+     * @return
+     */
     public Date getVonDate(){
         return this.von;
     }
@@ -76,6 +80,10 @@ public class Bestellung {
         return df.format(bis);
     }
     
+    /**
+     *
+     * @return
+     */
     public Date getBisDate(){
         return this.bis;
     }
