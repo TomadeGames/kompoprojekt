@@ -5,38 +5,61 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:head>
         <title>Startseite</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="css/style.css"/>
     </h:head>
     <h:body>
-        <h:form>
-            <h:outputText value="Id:"/><br/>
-            <h:inputText value="#{addmaterialview.materialId}" id="materialId"/><br/>
-            <h:outputText value="Materialname:"/><br/>
-            <h:inputText value="#{addmaterialview.materialname}" id="materialName"/><br/>
-            <h:outputText value="Anzahl:"/><br/>
-            <h:inputText value="#{addmaterialview.materialanzahl}" id="materialAnzahl"/><br/>
-            <br/>
-            <h:commandButton value="Material einlagern" action="#{addmaterialview.changeMaterial()}"/><br/>
-            <br/>
-            <h:outputText value="#{addmaterialview.einfuegStatus}"/><br/>
-            <br/>
-            <table>
-                <tr>
-                    <td><h:outputText value="Id"/></td>
-                    <td><h:outputText value="Material" /></td>
-                    <td><h:outputText value="Vorhanden" /></td>
-                    <td><h:outputText value="L&ouml;schen/Hinzuf&uuml;gen"/></td>
-                </tr>
-                <ui:repeat value="#{addmaterialview.allMaterialien}" var="item">
-                    <tr>
-                        <td><h:outputText value="#{item.id}"/></td>
-                        <td><h:outputText value="#{item.name}"/></td>
-                        <td><h:outputText value="#{item.anzahl}"/></td>
-                        <td><h:commandButton value="#{addmaterialview.isDeletet(item)}" action="#{addmaterialview.loeschen(item)}"/></td>
-                    </tr>
-                </ui:repeat>
-            </table>
+        <ul class="nav nav-pills">
+            <li role="presentation"><h:link value="Startseite" outcome="index"/></li>
+            <li role="presentation"><h:link value="Ausleihen" outcome="leihe"/></li>
+            <li role="presentation"><h:link value="Material hinuzf&uuml;gen" outcome="addMaterial"/></li>
+            <li role="presentation" class="active"><h:link value="Material &auml;ndern" outcome="changeMaterial"/><br/></li>
+        </ul>
+
+        <h:form class="form-inline">                    
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="heading3"><h:outputText value="Material ändern:"/></div>
+                </div>         
+                <div class="panel-body">
+                    <h:outputText value="Id:"/><br/>
+                    <h:inputText class="form-control" value="#{addmaterialview.materialId}" id="materialId"/><br/>
+                    <h:outputText value="Materialname:"/><br/>
+                    <h:inputText class="form-control" value="#{addmaterialview.materialname}" id="materialName"/><br/>
+                    <h:outputText value="Anzahl:"/><br/>
+                    <h:inputText class="form-control" value="#{addmaterialview.materialanzahl}" id="materialAnzahl"/><br/>
+                    <br/>
+                    <h:commandButton class="btn btn-default" value="Material einlagern" action="#{addmaterialview.changeMaterial()}"/><br/>
+                    <br/>
+                    <h:outputText value="#{addmaterialview.einfuegStatus}"/><br/>
+                    <br/>
+                </div>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="heading3"><h:outputText value="Materialien"/></div>
+                </div>           
+                <div class="table-responsive">
+                    <table class="table table-striped">  
+                        <tr>
+                            <td><h:outputText class="tableheading" value="Id"/></td>
+                            <td><h:outputText class="tableheading" value="Material" /></td>
+                            <td><h:outputText class="tableheading" value="Vorhanden" /></td>
+                            <td><h:outputText class="tableheading" value="L&ouml;schen/Hinzuf&uuml;gen"/></td>
+                        </tr>
+                        <ui:repeat value="#{addmaterialview.allMaterialien}" var="item">
+                            <tr>
+                                <td><h:outputText value="#{item.id}"/></td>
+                                <td><h:outputText value="#{item.name}"/></td>
+                                <td><h:outputText value="#{item.anzahl}"/></td>
+                                <td><h:commandButton class="btn btn-default" value="#{addmaterialview.isDeletet(item)}" action="#{addmaterialview.loeschen(item)}"/></td>
+                            </tr>
+                        </ui:repeat>
+                    </table>
+                </div>
+            </div>
         </h:form>
-        <h:link value="Startseite" outcome="index"/>
     </h:body>
 </html>
 

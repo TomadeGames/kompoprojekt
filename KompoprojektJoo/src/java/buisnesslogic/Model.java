@@ -245,8 +245,10 @@ public class Model implements Serializable{
         if(summe + b.getAnzahl() <= m.getAnzahl()){
             b.setKommentar("");
             return true;
-        }
-        b.setKommentar("So viele Artikel sind nicht verfügbar");
+        }        
+        
+        b.setKommentar("So viele Artikel sind nicht verfügbar. Im Zeitraum sind " 
+                + summe + " von " + m.getAnzahl() + " bereits ausgeliehen.");
         return false;
     }
 }

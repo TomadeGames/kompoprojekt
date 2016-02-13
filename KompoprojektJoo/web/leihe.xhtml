@@ -7,93 +7,123 @@
     <h:head>
         <title>Materialien</title>
         <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="css/style.css"/>
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
         <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         <script src="js/datepicker.js"></script>
     </h:head>
     <h:body>
-        <h:form>
-            <h:outputText value="Name:"/><br/>
-            <h:inputText value="#{leiheview.leihename}" id ="name"/><br/>
-            <br/>
-            <table>
-                <tr>
-                    <td><h:outputText value="Material ID"/></td>
-                    <td><h:outputText value="Anzahl"/></td>
-                    <td><h:outputText value="von (YYYY-MM-DD)"/></td>
-                    <td><h:outputText value="bis (YYYY-MM-DD)"/></td>
-                    <td><h:outputText value="L&ouml;schen"/></td>
-                    <td></td>
-                </tr>
-                <ui:repeat value="#{leiheview.bestellungen}" var="bestellung">
-                    <tr>
-                        <td>
-                            <h:selectOneMenu  value="#{bestellung.materialId}">
-                                <f:selectItems value="#{leiheview.materialienMap}" />
-                            </h:selectOneMenu >
-                        </td>
-                        <td><h:inputText value="#{bestellung.anzahl}"/></td>
-                        <td>
-                            <h:inputText styleClass = "datepicker" value="#{bestellung.von}"></h:inputText>
-                        </td>
-                        <td>
-                            <h:inputText styleClass = "datepicker" value="#{bestellung.bis}"></h:inputText>
-                        </td>
-                        <td><h:commandButton value="X" action="#{leiheview.removeBestellung(bestellung)}"/></td>
-                        <td><h:outputText value="#{bestellung.kommentar}"/></td>
-                    </tr>
-                </ui:repeat>
-            </table>
+        <ul class="nav nav-pills">
+            <li role="presentation"><h:link value="Startseite" outcome="index"/></li>
+            <li role="presentation" class="active"><h:link value="Ausleihen" outcome="leihe"/></li>
+            <li role="presentation"><h:link value="Material hinuzf&uuml;gen" outcome="addMaterial"/></li>
+            <li role="presentation"><h:link value="Material &auml;ndern" outcome="changeMaterial"/><br/></li>
+        </ul>
+        <h:form class="form-inline">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="heading3">Bestellung:</div>
+                </div>
+                <div class="panel-body">
+                    <h:outputText value="Name:"/><br/>
+                    <h:inputText class="form-control" value="#{leiheview.leihename}" id ="name"/><br/>
+                    <br/>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <tr>                            
+                            <td><h:outputText class="tableheading" value="Material ID"/></td>
+                            <td><h:outputText class="tableheading" value="Anzahl"/></td>
+                            <td><h:outputText class="tableheading" value="von (YYYY-MM-DD)"/></td>
+                            <td><h:outputText class="tableheading" value="bis (YYYY-MM-DD)"/></td>
+                            <td><h:outputText class="tableheading" value="L&ouml;schen"/></td>
+                            <td></td>
+                        </tr>
+                        <ui:repeat value="#{leiheview.bestellungen}" var="bestellung">
+                            <tr>
+                                <td>
+                                    <h:selectOneMenu class="form-control" value="#{bestellung.materialId}">
+                                        <f:selectItems value="#{leiheview.materialienMap}" />
+                                    </h:selectOneMenu >
+                                </td>
+                                <td><h:inputText class="form-control" value="#{bestellung.anzahl}"/></td>
+                                <td>
+                                    <h:inputText styleClass = "datepicker form-control" value="#{bestellung.von}"></h:inputText>
+                                </td>
+                                <td>
+                                    <h:inputText styleClass = "datepicker form-control" value="#{bestellung.bis}"></h:inputText>
+                                </td>
+                                <td><h:commandButton class="btn btn-default" value="X" action="#{leiheview.removeBestellung(bestellung)}"/></td>
+                                <td><h:outputText value="#{bestellung.kommentar}"/></td>
+                            </tr>
+                        </ui:repeat>
+                    </table>            
+                </div>
+                <div class="panel-body">
+                    <div class="btn-group" role="group" >
+                        <h:commandButton class="btn btn-default" value="+" action="#{leiheview.addBestellung()}"/>
+                        <h:commandButton class="btn btn-default" value="Bestellen" action="#{leiheview.leihen()}"/>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="alert alert-info" role="alert">
+                        <h:outputText value="#{leiheview.bestellstatus}"/>
+                    </div>
+                </div>
+            </div>
             
-            <h:commandButton value="+" action="#{leiheview.addBestellung()}"/>
-            <h:commandButton value="Bestellen" action="#{leiheview.leihen()}"/>
-            <br/>
-            <br/>
-            <h:outputText value="#{leiheview.bestellstatus}"/>
-            <br/>
-            <h3>
-            <h:outputText value="Materialien:"/><br/>
-            </h3>
-            <table>
-                <tr>
-                    <td><h:outputText value="Id"/></td>
-                    <td><h:outputText value="Material" /></td>
-                    <td><h:outputText value="Vorhanden" /></td>
-                </tr>
-                <ui:repeat value="#{leiheview.materialien}" var="item">
-                    <tr>
-                        <td><h:outputText value="#{item.id}"/></td>
-                        <td><h:outputText value="#{item.name}"/></td>
-                        <td><h:outputText value="#{item.anzahl}"/></td>
-                    </tr>
-                </ui:repeat>
-            </table>
-            <br/>
-            <h3>
-                <h:outputText value="Leihen:"/>
-            </h3>
-            <table>
-                <tr>
-                    <td><h:outputText value="Name"/></td>
-                    <td><h:outputText value="Material" /></td>
-                    <td><h:outputText value="Anzahl" /></td>
-                    <td><h:outputText value="Von" /></td>
-                    <td><h:outputText value="Bis" /></td>
-                    <td><h:outputText value="L&ouml;schen"/></td>
-                </tr>
-                <ui:repeat value="#{leiheview.allLeihen}" var="item">
-                    <tr>
-                        <td><h:outputText value="#{item.name}"/></td>
-                        <td><h:outputText value="#{item.material}"/></td>
-                        <td><h:outputText value="#{item.anzahl}"/></td>
-                        <td><h:outputText value="#{item.von}"/></td>
-                        <td><h:outputText value="#{item.bis}"/></td>
-                        <td><h:commandButton value="X" action="#{leiheview.removeLeihe(item)}"/></td>
-                    </tr>
-                </ui:repeat>
-            </table>
-            <br/>
-            <h:link value="Startseite" outcome="index"/>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="heading3"><h:outputText value="Materialien:"/></div>
+                </div>           
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <tr>
+                            <td><h:outputText class="tableheading" value="Id"/></td>
+                            <td><h:outputText class="tableheading" value="Material" /></td>
+                            <td><h:outputText class="tableheading" value="Vorhanden" /></td>
+                        </tr>
+                        <ui:repeat value="#{leiheview.materialien}" var="item">
+                            <tr>
+                                <td><h:outputText value="#{item.id}"/></td>
+                                <td><h:outputText value="#{item.name}"/></td>
+                                <td><h:outputText value="#{item.anzahl}"/></td>
+                            </tr>
+                        </ui:repeat>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="heading3"><h:outputText value="Leihen:"/></div>
+                </div>           
+                <div class="table-responsive">
+                    <table class="table table-striped">                               
+                        <tr>
+                            <td><h:outputText class="tableheading" value="Name"/></td>
+                            <td><h:outputText class="tableheading" value="Material" /></td>
+                            <td><h:outputText class="tableheading" value="Anzahl" /></td>
+                            <td><h:outputText class="tableheading" value="Von" /></td>
+                            <td><h:outputText class="tableheading" value="Bis" /></td>
+                            <td><h:outputText class="tableheading" value="L&ouml;schen"/></td>
+                        </tr>
+                        <ui:repeat value="#{leiheview.allLeihen}" var="item">
+                            <tr>
+                                <td><h:outputText value="#{item.name}"/></td>
+                                <td><h:outputText value="#{item.material}"/></td>
+                                <td><h:outputText value="#{item.anzahl}"/></td>
+                                <td><h:outputText value="#{item.von}"/></td>
+                                <td><h:outputText value="#{item.bis}"/></td>
+                                <td><h:commandButton class="btn btn-default" value="X" action="#{leiheview.removeLeihe(item)}"/></td>
+                            </tr>
+                        </ui:repeat>
+                    </table>
+                </div>
+            </div>
+            <br/>            
         </h:form>
     </h:body>
 </html>
