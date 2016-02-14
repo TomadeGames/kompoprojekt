@@ -81,6 +81,11 @@ public class AddMaterialView implements Serializable{
                 this.einfuegStatus = "Mindestens ein Material muss eingelagert werden";
                 return;
             }
+            Material mat = this.model.getMaterial(materialname);
+            if(mat != null){
+                this.einfuegStatus = "Materialname schon vorhanden";
+                return;
+            }
             this.model.addMaterial(this.materialname, this.materialanzahl);
             this.einfuegStatus = this.materialname + " erfolgreich hinzugefügt";
         }
