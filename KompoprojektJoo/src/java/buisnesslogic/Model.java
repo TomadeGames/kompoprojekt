@@ -231,6 +231,10 @@ public class Model implements Serializable{
             return false;
         }
         
+        if(!b.getBisDate().after(b.getVonDate())){
+            b.setKommentar("Eine Leihe muss mindestens einen Tag dauern");
+            return false;
+        }
         //Prüfung auf Vorhandene Anzahl
         List<Leihe> leihen = this.db.getAllLeihen();
         int summe = 0;
