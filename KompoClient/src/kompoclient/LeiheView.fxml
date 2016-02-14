@@ -25,7 +25,9 @@
         
         <Button layoutX="30" layoutY="120" text="Bestellen" onAction="#handleBestellenAction" fx:id="button" />
         
-        <Label layoutX="100" layoutY="120" fx:id="statusLabel" text=""/> 
+        <Button layoutX="100" layoutY="120" text="refresh" onAction="#handleRefreshAction" fx:id="refreshButton"/>
+        
+        <Label layoutX="170" layoutY="120" fx:id="statusLabel" text=""/> 
         
         <Button layoutX="30" layoutY="180" text="Material Hinzufügen" onAction="#handleLeiheAction" fx:id="leiheButton"/>   
 

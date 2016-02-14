@@ -9,6 +9,7 @@ import entity.GesamtLeihe;
 import entity.Leihe;
 import entity.Material;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.util.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -27,6 +28,67 @@ public class Persistence {
     private static Long nextMaterialId = 1L;
     private static Long nextLeiheId = 1L;
     private static Long nextGesamtLeiheId =1L;
+    private static Connection con;
+    
+    private static boolean buildConnection() {
+        try{
+         Class.forName("org.apache.derby.jdbc.ClientDriver").newInstance();
+            con = DriverManager.getConnection("jdbc:derby://localhost:1527/kastner_oberbeck_rieke", "bla", "bla");
+            con.setAutoCommit(true);
+            DatabaseMetaData metadata = con.getMetaData();
+            ResultSet resultSet;
+            System.out.println("Suche MATERIAL Table");
+            resultSet = metadata.getTables(null, null, "MATERIAL", null);
+            if(!resultSet.next()){
+            System.out.println("MATERIAL Table wird erstellt");
+                Statement stmt = con.createStatement();
+                stmt.executeUpdate("CREATE TABLE MATERIAL " +
+                    "(id BIGINT not NULL, " +
+                    " name VARCHAR(255), " + 
+                    " anzahl INTEGER, " + 
+                    " geloescht SMALLINT, " + 
+                    " PRIMARY KEY ( id ))");
+            }
+            System.out.println("Suche LEIHE Table");
+            resultSet = metadata.getTables(null, null, "LEIHE", null);
+            if(!resultSet.next()){
+                System.out.println("LEIHE Table wird erstellt");
+                Statement stmt = con.createStatement();
+                stmt.executeUpdate("CREATE TABLE LEIHE " +
+                    "(id BIGINT not NULL, " +
+                    " name VARCHAR(255), " + 
+                    " anzahl INTEGER, " + 
+                    " endedatum DATE, " + 
+                    " startdatum DATE," +
+                    " material_id BIGINT," +
+                    " PRIMARY KEY ( id ))");
+            }
+            System.out.println("Suche GESAMTLEIHE Table");
+            resultSet = metadata.getTables(null, null, "GESAMTLEIHE", null);
+            if(!resultSet.next()){
+                System.out.println("GESAMTLEIHE Table wird erstellt");
+                Statement stmt = con.createStatement();
+                stmt.executeUpdate("CREATE TABLE GESAMTLEIHE " +
+                    "(id BIGINT not NULL, " +
+                    " name VARCHAR(255), " + 
+                    " PRIMARY KEY ( id ))");
+            }
+            System.out.println("Suche GESAMTLEIHE_LEIHE Table");
+            resultSet = metadata.getTables(null, null, "GESAMTLEIHE_LEIHE", null);
+            if(!resultSet.next()){
+                System.out.println("GESAMTLEIHE_LEIHE Table wird erstellt");
+                Statement stmt = con.createStatement();
+                stmt.executeUpdate("CREATE TABLE GESAMTLEIHE_LEIHE " +
+                    "(gesamtleihe_id BIGINT not NULL, " +
+                    " einzelleihen_id BIGINT, " + 
+                    " PRIMARY KEY ( gesamtleihe_id, einzelleihen_id))");
+            }
+            return true;
+        }catch(Exception e){
+            System.out.println("Fehler beim Verbinden: "+ e);
+            return false;
+        }
+    }
     
     public static String insertGesamtLeihe(List<Leihe> leihen, String name){
         for(Leihe l: leihen){
@@ -36,16 +98,20 @@ public class Persistence {
             }
         }
         Long id = Persistence.getFreeGesamtLeiheId();
-        try(Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/komposabgabe2", "bla", "bla")){
-            con.setAutoCommit(true);
+        if(con == null){
+            if(!buildConnection()){
+                return null;
+            }
+        }
+        try{
             Statement stmt = con.createStatement();
             stmt.executeUpdate("insert into GesamtLeihe(Id, name) values(" 
                     + id + ",'" + name + "')");
             
             System.out.println(">Erfolgreich");
-            for(Leihe l: leihen){
+            leihen.stream().forEach((l) -> {
                 insertLeihe(l.getAnzahl(), l.getMaterialId(), l.getVon(), l.getBis());
-            }
+            });
             return "Leihe Erfolgreich";
         }
         catch(Exception e){
@@ -95,9 +161,12 @@ public class Persistence {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String vonString = df.format(von);
         String bisString = df.format(bis);
-        
-        try(Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/komposabgabe2", "bla", "bla")){
-            con.setAutoCommit(true);
+        if(con == null){
+            if(!buildConnection()){
+                return;
+            }
+        }
+        try{
             Statement stmt = con.createStatement();
             stmt.executeUpdate("insert into LEIHE(Id, anzahl, endedatum, startdatum, material_id) values(" 
                     + id + "," + anzahl + ",'" + bisString + "','" + vonString + "'," + materialId + ")");
@@ -111,9 +180,12 @@ public class Persistence {
     }
     
     public static void insertMaterial(String materialName, int anzahl) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
-        Class.forName("org.apache.derby.jdbc.ClientDriver").newInstance();
-        try(Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/komposabgabe2", "bla", "bla")){
-            con.setAutoCommit(true);
+       if(con == null){
+           if(!buildConnection()){
+               return;
+           }
+       }
+        try{
             Long id = getFreeMaterialId();
             Statement stmt = con.createStatement();
             stmt.executeUpdate("insert into MATERIAL(id, anzahl, geloescht, name) values(" 
@@ -177,8 +249,12 @@ public class Persistence {
     
     public static List<GesamtLeihe> getGesamtLeihen(){
         List<GesamtLeihe> erg = new ArrayList<>();
-        try(Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/komposabgabe2", "bla", "bla")){
-            con.setAutoCommit(true);
+        if(con == null){
+           if(!buildConnection()){
+               return null;
+           }
+       }
+        try{
             Statement stmt = con.createStatement();
             System.out.println("Select Material");
             ResultSet rs = stmt.executeQuery("select * from GesamtLeihe");
@@ -198,8 +274,12 @@ public class Persistence {
     
     public static List<Leihe> getLeihen(){
         List<Leihe> erg = new ArrayList<>();
-        try(Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/komposabgabe2", "bla", "bla")){
-            con.setAutoCommit(true);
+        if(con == null){
+           if(!buildConnection()){
+               return null;
+           }
+       }
+        try{
             Statement stmt = con.createStatement();
             System.out.println("Select Leihe");
             ResultSet rs = stmt.executeQuery("select * from Leihe");
@@ -230,8 +310,12 @@ public class Persistence {
     
     public static List<Material> getMaterial(){
         List<Material> erg = new ArrayList<>();
-        try(Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/komposabgabe2", "bla", "bla")){
-            con.setAutoCommit(true);
+        if(con == null){
+           if(!buildConnection()){
+               return null;
+           }
+       }
+        try{
             Statement stmt = con.createStatement();
             System.out.println("Select Material");
             ResultSet rs = stmt.executeQuery("select * from Material");
@@ -251,8 +335,12 @@ public class Persistence {
     }
     
     public static Material getMaterial(Long id){
-        try(Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/komposabgabe2", "bla", "bla")){
-            con.setAutoCommit(true);
+        if(con == null){
+           if(!buildConnection()){
+               return null;
+           }
+       }
+        try{
             Statement stmt = con.createStatement();
             System.out.println("Select Material");
             ResultSet rs = stmt.executeQuery("select * from Material where id = " + id);
@@ -272,8 +360,12 @@ public class Persistence {
     }
     
     public static Material getMaterial(String name){
-        try(Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/komposabgabe2", "bla", "bla")){
-            con.setAutoCommit(true);
+        if(con == null){
+           if(!buildConnection()){
+               return null;
+           }
+       }
+        try{
             Statement stmt = con.createStatement();
             System.out.println("Select Material");
             ResultSet rs = stmt.executeQuery("select * from Material where name = '" + name + "'");

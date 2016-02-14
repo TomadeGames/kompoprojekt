@@ -70,10 +70,7 @@ public class LeiheViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        List<Material> mats = Persistence.getMaterial();
-        for(Material m: mats){
-            materialName0.getItems().add(m.getName());            
-        }
+        refreshMaterials();
         idColumn.setCellValueFactory(new PropertyValueFactory<>("idProperty"));
         materialColumn.setCellValueFactory(new PropertyValueFactory<>("materialProperty"));
         anzahlColumn.setCellValueFactory(new PropertyValueFactory<>("anzahlProperty"));
@@ -82,7 +79,21 @@ public class LeiheViewController implements Initializable {
         leiheTable.getItems().setAll(Persistence.getLeihen());
     }    
     
-        
+    private void refreshMaterials(){
+        List<Material> mats = Persistence.getMaterial();
+        materialName0.getItems().removeAll(materialName0.getItems());
+        for(Material m: mats){
+            materialName0.getItems().add(m.getName());            
+        }
+    }
+     
+    
+    @FXML
+    private void handleRefreshAction(ActionEvent event){
+        refreshMaterials();
+        leiheTable.getItems().setAll(Persistence.getLeihen());
+    }
+    
     @FXML
     private void handleLeiheAction(ActionEvent event){
         try{
@@ -106,15 +117,19 @@ public class LeiheViewController implements Initializable {
         List<Leihe> leihen = new ArrayList<>();
         Leihe l = new Leihe();
         l.setId(Persistence.getFreeLeiheId());
-        Material m = Persistence.getMaterial((String)materialName0.getValue());
-        l.setMaterialId(m.getId());
-        l.setVon(Date.from(von0.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        l.setBis(Date.from(bis0.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        l.setAnzahl(Integer.parseInt(anzahl0.getText()));
-        leihen.add(l);
-        String status = Persistence.insertGesamtLeihe(leihen, nameString);
-        this.statusLabel.setText(status);
-        
+        try{
+            Material m = Persistence.getMaterial((String)materialName0.getValue());
+            l.setMaterialId(m.getId());
+            l.setVon(Date.from(von0.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            l.setBis(Date.from(bis0.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            l.setAnzahl(Integer.parseInt(anzahl0.getText()));
+            leihen.add(l);
+            String status = Persistence.insertGesamtLeihe(leihen, nameString);
+            this.statusLabel.setText(status);
+        }
+        catch(Exception e){
+            this.statusLabel.setText("Bitte alle Felder korrekt ausfüllen!");
+        }
     }
     
 }
